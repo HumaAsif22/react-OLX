@@ -1,18 +1,29 @@
 import './App.css';
-// import {useState, useEffect} from 'react'
-import Login from './views/Auth/Login'
-import Signup from './views/Auth/Signup';
+// import Login from './views/Auth/Login'
+// import Signup from './views/Auth/Signup';
+import Home from './views/Home';
+import Auth from './views/Auth';
+import PostAd from './views/Auth/PostAd';
+import { useState } from 'react';
+
+
 function App() {
 
+  const [user, setUser] = useState()
+
+  const updateUser = (userObj) => {
+    setUser(userObj)
+  }
 
 
   return (
     <div className="App">
       <header className="App-header">
         <div className="main">
-          {/* <Auth/> */}
-          <Login/>
-          {/* <Signup/> */}
+          
+          {user ? <Home/> : <Auth updateUser={updateUser}/>}
+          {/* <PostAd/> */}
+          
         </div>
       </header>
     </div>

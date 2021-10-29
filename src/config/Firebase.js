@@ -2,7 +2,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, getFirestore } from "firebase/firestore"; 
+import { addDoc, collection, getFirestore, setDoc, query, doc , getDoc, getDocs } from "firebase/firestore"; 
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+// import { query, where } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,36 +27,82 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore();
 const auth = getAuth();
+const storage = getStorage();
 
-function signupUser({email, password,fullName,age}){
-    createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-   alert("congo");
+async function signupUser({email, password,fullName,age}){
+    const {user: { uid }} = await createUserWithEmailAndPassword(auth, email, password)
+  
 
-   addDoc(collection(db, "users"), {
-   email,fullName,age
-  }).then(()=> {
-      alert("congo");
-  }).catch((error) => {
-      alert(error.message)
+   await setDoc(doc(db, "users", uid), {
+   email,fullName,age,uid
   })
-  })
-  .catch((error) => {
-    alert(error.message);
-  });
+
+  return uid
+  
 }
 
 
-function loginUser(email,password){
-signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    alert("Logged In")
-  })
-  .catch((error) => {
-    alert(error.message);
-  });
+async function loginUser(email,password){
+  const {user: { uid }} = await signInWithEmailAndPassword(auth, email, password)
+
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+  return {uid, ...docSnap.data()}
+  
 }
+
+async function submitPost(data){
+  //upload files to storage
+
+  let { images } = data
+  let imagesUrl = []
+  
+  for(let i = 0; i < images.length; i++){
+    const storageRef = ref(storage, 'ads/' + images[i].name)
+    await uploadBytes(storageRef, images[i])
+    const url = await getDownloadURL(storageRef)
+    imagesUrl.push(url)
+  }
+  data.images = imagesUrl
+  //add posts to database
+  await addDoc(collection(db, 'newPost'), data)
+  alert('Data added successfully!')
+}
+
+async function getAllAds(){
+  const q = query(collection(db, "newPost"))
+  const querySnapshot = await getDocs(q)
+  const currentAds = []
+  querySnapshot.forEach(doc => {
+    currentAds.push(doc.data())
+  })
+  return currentAds
+}
+
+async function callAllData(){
+  const q = query(collection(db, "newPost"));
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(doc.id, " => ", doc.data());
+  
+});
+
+}
+
+
 export{
     signupUser,
-    loginUser
+    loginUser,
+    submitPost,
+    getAllAds,
+    callAllData
 }

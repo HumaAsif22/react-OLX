@@ -44,8 +44,8 @@ function Signup() {
 
             </div>
             
-            
             <button className="form-button" onClick={() => signupUser({email, password,fullName,age})}>Signup</button>
+            <a class="form-link" href="-">Already have an account? Sign in</a>
 
             </div>
 
