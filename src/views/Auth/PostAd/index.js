@@ -1,10 +1,14 @@
 import { submitPost, getAllAds } from "../../../config/Firebase";
 import { useState, useEffect } from 'react'
+import { useHistory } from "react-router";
+import { useSelector } from "react-redux";
 
 function PostAd({setHome}){
 
     const [form, setForm] = useState({})
     const [ads, setAds] = useState([])
+    const history = useHistory()
+    const theme = useSelector(state => state.theme)
     
     useEffect(async () => {
         const tempAds = await getAllAds()
@@ -21,18 +25,21 @@ function PostAd({setHome}){
     }
 
     const closeAd = () => {
-        setHome()
+        // setHome()
+        history.push('/')
 
     }
 
     // console.log('form ===> ' ,form)
     console.log('ads ===>',ads)
 
+    let themeClass = `${theme}-postAdTheme`
+
     
     return (
-        <div className="postCard">
+        <div className="postCard" style={{background: theme}}>
 
-            <div className="post-form">
+            <div className={themeClass}>
 
                 <button className="close-post" onClick={closeAd}><i class="far fa-times-circle"></i></button><br/>
 

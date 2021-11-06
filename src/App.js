@@ -1,32 +1,30 @@
 import './App.css';
-// import Login from './views/Auth/Login'
-// import Signup from './views/Auth/Signup';
-import Home from './views/Home';
-import Auth from './views/Auth';
-import PostAd from './views/Auth/PostAd';
-import { useState } from 'react';
+import Router from './config/router';
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 function App() {
 
-  const [user, setUser] = useState()
+  // const [user, setUser] = useState()
 
-  const updateUser = (userObj) => {
-    setUser(userObj)
-  }
+  // const updateUser = (userObj) => {
+  //   setUser(userObj)
+  // }
 
 
   return (
+    <Provider store={store}>
     <div className="App">
       <header className="App-header">
         <div className="main">
-          
-          {user ? <Home/> : <Auth updateUser={updateUser}/>}
-          {/* <PostAd/> */}
-          
+        <Router/>  
+
+          {/* {user ? <Home/> : <Auth updateUser={updateUser}/>} */}
         </div>
       </header>
     </div>
+    </Provider>
   );
 }
 

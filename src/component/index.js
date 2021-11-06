@@ -1,19 +1,27 @@
-function Data ({id,userId,title,body,dlet}) {
+import { useSelector } from "react-redux";
+
+function Post ({title,images,description,price,dlet}) {
+
+    const theme = useSelector(state => state.theme)
+    const themeClass = `${theme}-postTheme`
 
     return (
-        <div className="data-content">
-            <h3>ID : {id}</h3>
+        <div className={themeClass}>
+            {/* <h3>ID : {item.id}</h3> */}
+            <img style={{width:'300px',height:'200px'}} src={images[0]}/>
             <br/>
-            <h4>Title : {title}</h4>
+            <h4>{title}</h4>
             <br/>
-            <p>{body}</p>
+            <p>Description: {description}</p>
+            <br/>
+            <h5>Price: {price} </h5>
             <br/>
             <div>
             <button className="dlt" onClick={dlet}>Delete</button>
-            <button className="edit">Edit</button>
+            {/* <button className="edit">Edit</button> */}
             </div>
         </div>
     );
 }
 
-export default Data
+export default Post

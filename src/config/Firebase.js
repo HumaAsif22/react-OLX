@@ -1,10 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, getFirestore, setDoc, query, doc , getDoc, getDocs } from "firebase/firestore"; 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { addDoc, collection, getFirestore, setDoc, query, doc , getDoc, getDocs, where, orderBy } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
-// import { query, where } from "firebase/firestore";
+
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -29,8 +30,14 @@ const db = getFirestore();
 const auth = getAuth();
 const storage = getStorage();
 
-async function signupUser({email, password,fullName,age}){
-    const {user: { uid }} = await createUserWithEmailAndPassword(auth, email, password)
+async function signupUser({email, password,fullName,age,phoneNumber,photoURL}){
+    const {user: { uid }} = await createUserWithEmailAndPassword(auth, email, password,fullName)
+    await updateProfile(auth.currentUser, {
+      displayName: fullName, 
+      age: age,
+      phoneNumber: phoneNumber,
+      photoURL: photoURL
+    })
   
 
    await setDoc(doc(db, "users", uid), {
@@ -42,8 +49,8 @@ async function signupUser({email, password,fullName,age}){
 }
 
 
-async function loginUser(email,password){
-  const {user: { uid }} = await signInWithEmailAndPassword(auth, email, password)
+async function loginUser(email,password,fullName){
+  const {user: { uid }} = await signInWithEmailAndPassword(auth, email, password,fullName)
 
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
@@ -86,23 +93,54 @@ async function getAllAds(){
   return currentAds
 }
 
-async function callAllData(){
-  const q = query(collection(db, "newPost"));
+// async function callAllData(){
+//   const q = query(collection(db, "newPost"));
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-  console.log(doc.id, " => ", doc.data());
+//   const querySnapshot = await getDocs(q);
+//   querySnapshot.forEach((doc) => {
+//   // doc.data() is never undefined for query doc snapshots
+//   console.log(doc.id, " => ", doc.data());
   
-});
+// });
 
+// }
+
+
+async function callAllData(searchedItem){
+  console.log("firebase searched data: ", searchedItem)
+  let dataCopyArray = []
+
+  if(searchedItem){
+    const q = query(collection(db, "newPost"), where("title", "==", searchedItem))
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+    let dataCopy = doc.data()
+    dataCopyArray.push(dataCopy)
+  });
+  }
+  else{
+    const q = query(collection(db, "newPost"), orderBy("createdAt", "desc"))
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+    let dataCopy = doc.data()
+    dataCopyArray.push(dataCopy)
+  });
+  }
+console.log('firebase ===>',dataCopyArray)
+  return  dataCopyArray
 }
 
+function logout() {
+  signOut(auth)
+}
 
 export{
     signupUser,
     loginUser,
     submitPost,
     getAllAds,
-    callAllData
+    callAllData,
+    logout
 }

@@ -115,7 +115,7 @@
 }
 
 
-.data-content .dlt ,.edit{
+.dlt ,.edit{
   background-color: silver;
   text-transform: uppercase;
   padding: 13px;
@@ -216,7 +216,7 @@
 
 .header{
   height: 70px;
-  background-color: #c2bebe;
+  background-color: #c0aeae;
   display: flex;
   justify-content: space-between;
   padding:0 60px ;
@@ -243,7 +243,7 @@
 	border:2px solid black;
 	outline: none;
   margin-bottom: 1rem;
-	background: #eeeeee;
+	background: whitesmoke;
 	transition: background 0.2s, border-color 0.2s;
 }
 
@@ -267,7 +267,7 @@
 
 .postCard{
   min-height: 100vh;
-  /* background-color: #c9c7c7; */
+  background-color: #c9c7c7;
   background: transparent;
   background-size: cover;
   display: flex;
@@ -324,6 +324,7 @@
   font-size: 19px;
   border:none;
   font-weight:600;
+  margin-right: 10px;
   background-color: rgb(27, 26, 26);
   color:rgba(255, 255, 255, 0.89) ;
   cursor: pointer;
@@ -336,7 +337,99 @@
 }
 
 .home-body{
-  border: 1px solid red;
-  width: 1300px;
-  height: 500px;
+  /* border: 1px solid red; */
+  /* width: 1300px; */
+  /* height: 500px; */
+}
+
+.post-content{
+  /* border:1px solid #50625b; */
+  /* background:black; */
+  /* color: white; */
+  /* min-width: 450px;
+  min-height: 620px; */
+  grid-gap: 30px;
+  font-size: 19px;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  /* box-shadow: 3px 6px 40px white; */
+  margin-bottom: 10px;
+}
+
+.ad-content{
+  padding: 20px;
+  /* border: 1px solid red; */
+  background-color: #eeebeb;
+  /* min-height:450px ; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 655.5px;
+}
+
+.black-homeTheme{
+  background-color:rgb(17, 17, 17);
+  color: whitesmoke;
+}
+
+.black-postTheme{
+  padding: 20px;
+  /* border: 1px solid red; */
+  background-color:black;
+  color: white;
+  /* min-height:450px ; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.whitesmoke-postTheme{
+  padding: 20px;
+  /* border: 1px solid red; */
+  background-color:#eeebeb;
+  color: black;
+  /* min-height:450px ; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.black-postAdTheme{
+  width: 400px;
+	max-width: 400px;
+	margin: 1rem;
+	padding: 2rem;
+	background: rgb(70, 69, 69);
+  color: #f8f8f8; 
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 6px 40px rgb(32, 32, 32);
+}
+
+.whitesmoke-postAdTheme{
+  width: 400px;
+	max-width: 400px;
+	margin: 1rem;
+	padding: 2rem;
+	background: white;
+  color: #0d0d0d; 
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 6px 40px rgb(12, 12, 12);
 }
